@@ -1,34 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
+
+	"github.com/rm3l/container-scan-to-sarif/containerscan"
 )
-
-type ContainerScan struct {
-	ImageName                  string                               `json:"imageName"`
-	VulnerabilityScanTimestamp string                               `json:"vulnerabilityScanTimestamp"`
-	Vulnerabilities            []ContainerScanVulnerability         `json:"vulnerabilities"`
-	BestPracticeViolations     []ContainerScanBestPracticeViolation `json:"bestPracticeViolations"`
-}
-
-type ContainerScanVulnerability struct {
-	VulnerabilityId string `json:"vulnerabilityId"`
-	PackageName     string `json:"packageName"`
-	Severity        string `json:"severity"`
-	Description     string `json:"description"`
-	Target          string `json:"target"`
-}
-
-type ContainerScanBestPracticeViolation struct {
-	Code   string `json:"code"`
-	Title  string `json:"title"`
-	Level  string `json:"level"`
-	Alerts string `json:"alerts"`
-}
 
 func main() {
 	inputPath := flag.String("input", "./scanreport.json", "Path to the Azure Container Scan JSON Report")
@@ -36,15 +14,9 @@ func main() {
 
 	flag.Parse()
 
-	input, err := ioutil.ReadFile(*inputPath)
+	containerScan, err := containerscan.ParseContainerScanReport(*inputPath)
 	if err != nil {
-		log.Fatal("Error when opening file: ", err)
-	}
-
-	var containerScan ContainerScan
-	jsonUnmarshalErr := json.Unmarshal(input, &containerScan)
-	if jsonUnmarshalErr != nil {
-		log.Fatal("Error unmarshalling JSON: ", jsonUnmarshalErr)
+		log.Fatal("Error when parsing file: ", err)
 	}
 	fmt.Printf("containerScan: %+v", containerScan)
 }
