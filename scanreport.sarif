@@ -1,0 +1,157 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Documents/CommitteeSpecifications/2.1.0/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "azure-container-scan",
+          "informationUri": "https://github.com/Azure/container-scan",
+          "fullName": "Azure Container Scan",
+          "version": "0.1",
+          "rules": [
+            {
+              "id": "CVE-2018-12886",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "shortDescription": {
+                "text": "stack_protect_prologue in cfgexpand.c and stack_protect_epilogue in function.c in GNU Compiler Collection (GCC) 4.1 through 8 (under certain circumstances) generate instruction sequences when targeting ARM targets that spill the address of the stack protector guard, which allows an attacker to bypass the protection of -fstack-protector, -fstack-protector-all, -fstack-protector-strong, and -fstack-protector-explicit against stack overflow by controlling what the stack canary is compared against."
+              },
+              "fullDescription": {
+                "text": "stack_protect_prologue in cfgexpand.c and stack_protect_epilogue in function.c in GNU Compiler Collection (GCC) 4.1 through 8 (under certain circumstances) generate instruction sequences when targeting ARM targets that spill the address of the stack protector guard, which allows an attacker to bypass the protection of -fstack-protector, -fstack-protector-all, -fstack-protector-strong, and -fstack-protector-explicit against stack overflow by controlling what the stack canary is compared against."
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2018-12886"
+            },
+            {
+              "id": "CVE-2019-20367",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "shortDescription": {
+                "text": "nlist.c in libbsd before 0.10.0 has an out-of-bounds read during a comparison for a symbol name from the string table (strtab)."
+              },
+              "fullDescription": {
+                "text": "nlist.c in libbsd before 0.10.0 has an out-of-bounds read during a comparison for a symbol name from the string table (strtab)."
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2019-20367"
+            },
+            {
+              "id": "CVE-2020-1751",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "shortDescription": {
+                "text": "An out-of-bounds write vulnerability was found in glibc before 2.31 when handling signal trampolines on PowerPC. Specifically, the backtrace function did not properly check the array bounds when storing the frame address, resulting in a denial of service or potential code execution. The highest threat from this vulnerability is to system availability."
+              },
+              "fullDescription": {
+                "text": "An out-of-bounds write vulnerability was found in glibc before 2.31 when handling signal trampolines on PowerPC. Specifically, the backtrace function did not properly check the array bounds when storing the frame address, resulting in a denial of service or potential code execution. The highest threat from this vulnerability is to system availability."
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2020-1751"
+            },
+            {
+              "id": "CIS-DI-0001",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "shortDescription": {
+                "text": "Create a user for the container"
+              },
+              "fullDescription": {
+                "text": "Create a user for the container"
+              },
+              "helpUri": "https://github.com/goodwithtech/dockle/blob/master/CHECKPOINT.md#CIS-DI-0001"
+            },
+            {
+              "id": "CIS-DI-0005",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "shortDescription": {
+                "text": "Enable Content trust for Docker"
+              },
+              "fullDescription": {
+                "text": "Enable Content trust for Docker"
+              },
+              "helpUri": "https://github.com/goodwithtech/dockle/blob/master/CHECKPOINT.md#CIS-DI-0005"
+            }
+          ]
+        },
+        "extensions": [
+          {
+            "name": "Trivy",
+            "version": "latest"
+          },
+          {
+            "name": "Dockle",
+            "version": "latest"
+          }
+        ]
+      },
+      "results": [
+        {
+          "ruleId": "CVE-2018-12886",
+          "level": "error",
+          "message": {
+            "text": "stack_protect_prologue in cfgexpand.c and stack_protect_epilogue in function.c in GNU Compiler Collection (GCC) 4.1 through 8 (under certain circumstances) generate instruction sequences when targeting ARM targets that spill the address of the stack protector guard, which allows an attacker to bypass the protection of -fstack-protector, -fstack-protector-all, -fstack-protector-strong, and -fstack-protector-explicit against stack overflow by controlling what the stack canary is compared against."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "myacr.azurecr.io/ascdemo:770aed6bd33d7240b4bdb55f16348ce37b86bb09"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2019-20367",
+          "level": "error",
+          "message": {
+            "text": "nlist.c in libbsd before 0.10.0 has an out-of-bounds read during a comparison for a symbol name from the string table (strtab)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "myacr.azurecr.io/ascdemo:770aed6bd33d7240b4bdb55f16348ce37b86bb09"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2020-1751",
+          "level": "error",
+          "message": {
+            "text": "An out-of-bounds write vulnerability was found in glibc before 2.31 when handling signal trampolines on PowerPC. Specifically, the backtrace function did not properly check the array bounds when storing the frame address, resulting in a denial of service or potential code execution. The highest threat from this vulnerability is to system availability."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "myacr.azurecr.io/ascdemo:770aed6bd33d7240b4bdb55f16348ce37b86bb09"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CIS-DI-0001",
+          "level": "warning",
+          "message": {
+            "text": "Last user should not be root"
+          }
+        },
+        {
+          "ruleId": "CIS-DI-0005",
+          "level": "note",
+          "message": {
+            "text": "export DOCKER_CONTENT_TRUST=1 before docker pull/build"
+          }
+        }
+      ]
+    }
+  ]
+}
