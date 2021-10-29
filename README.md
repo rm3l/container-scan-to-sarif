@@ -41,7 +41,9 @@ Container images for `container-scan-to-sarif` are pushed to [GitHub Packages](h
 You can therefore run it with Docker, by mounting your Container Scan output inside the container, like so:
 
 ```shell
-docker container run --rm -v /path/to/my/container-scan-report.json:/data/scanreport.json -t ghcr.io/rm3l/container-scan-to-sarif 
+docker container run --rm \
+  -v /path/to/my/container-scan-report.json:/data/scanreport.json \
+  -t ghcr.io/rm3l/container-scan-to-sarif 
 ```
 
 ### CLI
