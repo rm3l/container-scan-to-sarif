@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 
 	"github.com/rm3l/container-scan-to-sarif/containerscan"
@@ -11,7 +10,7 @@ import (
 
 func main() {
 	inputPath := flag.String("input", "./scanreport.json", "Path to the Azure Container Scan JSON Report")
-	outputPath := flag.String("output", "./scanreport.sarif", "Path to the SARIF output file")
+	outputPath := flag.String("output", "", "Path to the SARIF output file. Default output is STDOUT")
 
 	flag.Parse()
 
@@ -31,6 +30,4 @@ func main() {
 	if sarifWriteErr != nil {
 		log.Fatal("Could not write SARIF report: ", err)
 	}
-
-	fmt.Println("Done!")
 }

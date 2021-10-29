@@ -210,5 +210,9 @@ func (report SarifReport) WriteTo(outputPath string) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(outputPath, jsonData, 0644)
+	if len(outputPath) > 0 {
+		return ioutil.WriteFile(outputPath, jsonData, 0644)
+	}
+	_, printErr := fmt.Println(string(jsonData))
+	return printErr
 }
