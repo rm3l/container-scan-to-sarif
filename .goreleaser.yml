@@ -22,6 +22,28 @@ archives:
       amd64: x86_64
 checksum:
   name_template: 'checksums.txt'
+dockers:
+  -
+    # GOOS of the built binaries/packages that should be used.
+    goos: linux
+    # GOARCH of the built binaries/packages that should be used.
+    goarch: amd64
+    # GOARM of the built binaries/packages that should be used.
+    goarm: ''
+    use: buildx
+    # Path to the Dockerfile (from the project root).
+    dockerfile: Dockerfile
+    image_templates:
+      - "ghcr.io/rm3l/{{.ProjectName}}:latest"
+      - "ghcr.io/rm3l/{{.ProjectName}}:{{ .Tag }}"
+      - "ghcr.io/rm3l/{{.ProjectName}}:v{{ .Major }}"
+      - "ghcr.io/rm3l/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}"
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
 changelog:
