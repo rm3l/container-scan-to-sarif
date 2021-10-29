@@ -16,3 +16,5 @@
 
 scanreport.json
 scanreport.sarif
+
+dist/
