@@ -194,7 +194,7 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 	return sarifReport, nil
 }
 
-//Inpired from https://github.com/aquasecurity/trivy/blob/main/pkg/report/template.go
+//Inspired from https://github.com/aquasecurity/trivy/blob/main/pkg/report/template.go
 func toPathUri(input string) string {
 	var result = input
 	var matches = re.FindStringSubmatch(result)
