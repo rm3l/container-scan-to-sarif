@@ -75,6 +75,8 @@ type SarifReportRunResultLocationPhysicalLocationArtifactLocation struct {
 type SarifReportRunResultLocationPhysicalLocationRegion struct {
 	StartLine   *int `json:"startLine,omitempty"`
 	StartColumn *int `json:"startColumn,omitempty"`
+	EndLine   *int `json:"endLine,omitempty"`
+	EndColumn *int `json:"endColumn,omitempty"`
 }
 
 func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifReport, error) {
@@ -125,7 +127,9 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 				FullDescription: SarifReportRunToolDriverRuleDescription{
 					Text: vulnerability.Description,
 				},
-				HelpUri: &helpUri,
+				Help: &SarifReportRunToolDriverRuleDescription{
+					Text: helpUri,
+				},
 			}
 		}
 		sarifRunResult := SarifReportRunResult{
@@ -135,11 +139,19 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 				Text: vulnerability.Description,
 			},
 		}
+		//startLine, endLine, startColumn, endColumn
+		physicalLocationRegion := []int { 1, 1, 1, 1}
 		sarifRunResult.Locations = append(sarifRunResult.Locations,
 			SarifReportRunResultLocation{
 				PhysicalLocation: SarifReportRunResultLocationPhysicalLocation{
 					ArtifactLocation: SarifReportRunResultLocationPhysicalLocationArtifactLocation{
 						Uri: toPathUri(vulnerability.Target),
+					},
+					Region: &SarifReportRunResultLocationPhysicalLocationRegion{
+						StartLine: &physicalLocationRegion[0],
+						EndLine: &physicalLocationRegion[1],
+						StartColumn: &physicalLocationRegion[2],
+						EndColumn: &physicalLocationRegion[3],
 					},
 				},
 			})
@@ -172,7 +184,9 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 				FullDescription: SarifReportRunToolDriverRuleDescription{
 					Text: bestPracticeViolation.Title,
 				},
-				HelpUri: &helpUri,
+				Help: &SarifReportRunToolDriverRuleDescription{
+					Text: helpUri,
+				},
 			}
 		}
 		sarifRunResult := SarifReportRunResult{
@@ -182,6 +196,22 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 				Text: bestPracticeViolation.Alerts,
 			},
 		}
+		//startLine, endLine, startColumn, endColumn
+		physicalLocationRegion := []int { 1, 1, 1, 1}
+		sarifRunResult.Locations = append(sarifRunResult.Locations,
+			SarifReportRunResultLocation{
+				PhysicalLocation: SarifReportRunResultLocationPhysicalLocation{
+					ArtifactLocation: SarifReportRunResultLocationPhysicalLocationArtifactLocation{
+						Uri: toPathUri("container-image"),
+					},
+					Region: &SarifReportRunResultLocationPhysicalLocationRegion{
+						StartLine: &physicalLocationRegion[0],
+						EndLine: &physicalLocationRegion[1],
+						StartColumn: &physicalLocationRegion[2],
+						EndColumn: &physicalLocationRegion[3],
+					},
+				},
+			})
 		sarifReportRun.Results = append(sarifReportRun.Results, sarifRunResult)
 	}
 	sarifReportRun.Tool.Driver = sarifReportRunDriver

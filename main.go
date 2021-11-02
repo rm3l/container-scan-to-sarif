@@ -18,13 +18,11 @@ func main() {
 	if err != nil {
 		log.Fatal("Error when parsing file: ", err)
 	}
-	// fmt.Printf("containerScan: %+v", containerScan)
 
 	sarifReport, err := sarif.FromContainerScan(containerScan)
 	if err != nil {
 		log.Fatal("Could not construct SARIF report from Container Scan input: ", err)
 	}
-	// fmt.Printf("sarifReport: %+v", sarifReport)
 
 	sarifWriteErr := sarifReport.WriteTo(*outputPath)
 	if sarifWriteErr != nil {
