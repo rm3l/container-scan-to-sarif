@@ -13,7 +13,7 @@ for common vulnerabilities (CVEs) and best practices violations. It also provide
 if needed, via an [`allowedlist.yaml` file](https://github.com/Azure/container-scan#ignoring-vulnerabilities).
 
 This is all great, but the resulting output is a non-standard JSON file, which, at this time,
-can only be uploaded as a build artifact, making it hard to read the report or integrate with other tools.
+can only be uploaded as a build artifact, making it hard to read across different CI runs or integrate with other tools.
 
 On the other hand, [GitHub Code Scanning](https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/about-code-scanning) integrates very well with external tools that are able to produce
 [Static Analysis Results Interchange Format (SARIF)](https://sarifweb.azurewebsites.net/) reports, so users can navigate their reports in the nice 
@@ -35,18 +35,65 @@ go install github.com/rm3l/container-scan-to-sarif@latest
 
 ## Usage
 
-### Container image
+### In GitHub Workflows
+
+I plan to provide a GitHub Action that would make it even easier to integrate this in your Workflows.
+
+Meanwhile, you can integrate `container-scan-to-sarif` manually in your existing Workflows, right after the execution 
+of the Azure Container Scan Action, like so:
+
+```yaml
+  - name: Scan Container Image
+    id: scan
+    continue-on-error: true
+    uses: Azure/container-scan@v0.1
+    with:
+      image-name: my-container-image
+      
+  - name: Convert Container Scan Report to SARIF
+    if: ${{ always() }}
+    env:
+      CONTAINER_SCAN_REPORT: ${{ steps.scan.outputs.scan-report-path }}
+      CONTAINER_SCAN_TO_SARIF_VERSION: 0.2.2
+    run: |
+      mkdir -p bin
+      curl -L "https://github.com/rm3l/container-scan-to-sarif/releases/download/${CONTAINER_SCAN_TO_SARIF_VERSION}/container-scan-to-sarif_${CONTAINER_SCAN_TO_SARIF_VERSION}_Linux_x86_64.tar.gz" \
+        | tar zx -C bin
+      chmod +x ./bin/container-scan-to-sarif
+      ./bin/container-scan-to-sarif -input "${CONTAINER_SCAN_REPORT}" -output ./containerscanreport.sarif
+
+  - name: Upload SARIF reports to GitHub Security tab
+    uses: github/codeql-action/upload-sarif@v1
+    if: ${{ always() }}
+    with:
+      sarif_file: 'containerscanreport.sarif'
+```
+
+After your Workflow run passes, you should then be able to navigate the container scan report under your "Security > Code scanning alerts" tab.
+
+### Standalone executable
+
+#### Container image
 
 Container images for `container-scan-to-sarif` are pushed to [GitHub Packages](https://github.com/rm3l/container-scan-to-sarif/pkgs/container/container-scan-to-sarif).
 You can therefore run it with Docker, by mounting your Container Scan output inside the container, like so:
 
+The working directory inside the container is set to `/data`. So you can just mount your Container Scan report under a `/data/scanreport.json` and run `container-scan-to-sarif`.
 ```shell
 docker container run --rm \
   -v /path/to/my/container-scan-report.json:/data/scanreport.json \
   -t ghcr.io/rm3l/container-scan-to-sarif 
 ```
 
-### CLI
+Alternatively, you can specify a different path (in the container), like so:
+```shell
+docker container run --rm \
+  -v /path/to/my/container-scan-report.json:/tmp/my-scanreport.json \
+  -t ghcr.io/rm3l/container-scan-to-sarif \
+  -input /tmp/my-scanreport.json
+```
+
+#### CLI
 
 ```shell
 container-scan-to-sarif --help
