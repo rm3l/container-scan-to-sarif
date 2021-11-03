@@ -232,6 +232,7 @@ func toPathUri(input string) string {
 		result = matches[re.SubexpIndex("path")]
 	}
 	result = strings.ReplaceAll(result, "\\", "/")
+	result = strings.ReplaceAll(result, ":", "__")
 	return result
 }
 
