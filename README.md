@@ -37,10 +37,7 @@ go install github.com/rm3l/container-scan-to-sarif@latest
 
 ### In GitHub Workflows
 
-I plan to provide a GitHub Action that would make it even easier to integrate this in your Workflows.
-
-Meanwhile, you can integrate `container-scan-to-sarif` manually in your existing Workflows, right after the execution 
-of the Azure Container Scan Action, like so:
+You may want to use the following Action in your Workflows: [rm3l/container-scan-to-sarif-action](https://github.com/rm3l/container-scan-to-sarif-action), like so:
 
 ```yaml
   - name: Scan Container Image
@@ -49,24 +46,20 @@ of the Azure Container Scan Action, like so:
     uses: Azure/container-scan@v0.1
     with:
       image-name: my-container-image
-      
+
   - name: Convert Container Scan Report to SARIF
+    id: scan-to-sarif
+    uses: rm3l/container-scan-to-sarif-action@v1
     if: ${{ always() }}
-    env:
-      CONTAINER_SCAN_REPORT: ${{ steps.scan.outputs.scan-report-path }}
-      CONTAINER_SCAN_TO_SARIF_VERSION: 0.2.2
-    run: |
-      mkdir -p bin
-      curl -L "https://github.com/rm3l/container-scan-to-sarif/releases/download/${CONTAINER_SCAN_TO_SARIF_VERSION}/container-scan-to-sarif_${CONTAINER_SCAN_TO_SARIF_VERSION}_Linux_x86_64.tar.gz" \
-        | tar zx -C bin
-      chmod +x ./bin/container-scan-to-sarif
-      ./bin/container-scan-to-sarif -input "${CONTAINER_SCAN_REPORT}" -output ./containerscanreport.sarif
+    with:
+      converter-version: 0.2.2
+      input-file: ${{ steps.scan.outputs.scan-report-path }}
 
   - name: Upload SARIF reports to GitHub Security tab
     uses: github/codeql-action/upload-sarif@v1
     if: ${{ always() }}
     with:
-      sarif_file: 'containerscanreport.sarif'
+      sarif_file: ${{ steps.scan-to-sarif.outputs.sarif-report-path }}
 ```
 
 After your Workflow run passes, you should then be able to navigate the container scan report under your "Security > Code scanning alerts" tab.
