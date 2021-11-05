@@ -93,9 +93,9 @@ container-scan-to-sarif --help
 
 Usage of container-scan-to-sarif:
   -input string
-        Path to the Azure Container Scan JSON Report (default "./scanreport.json")
+        Path to the Container Scan JSON Report (default "./scanreport.json")
   -output string
-        Path to the SARIF output file. Default output is STDOUT
+        Path to the SARIF output file. If not specified, the resulting SARIF report will be pretty-printed to the standard output.
 ```
 
 ## Building from source

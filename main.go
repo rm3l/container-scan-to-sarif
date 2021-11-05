@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	inputPath := flag.String("input", "./scanreport.json", "Path to the Azure Container Scan JSON Report")
-	outputPath := flag.String("output", "", "Path to the SARIF output file. Default output is STDOUT")
+	inputPath := flag.String("input", "./scanreport.json", "Path to the Container Scan JSON Report")
+	outputPath := flag.String("output", "", "Path to the SARIF output file. If not specified, the resulting SARIF report will be pretty-printed to the standard output.")
 
 	flag.Parse()
 
