@@ -4,14 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"regexp"
 	"strings"
 
 	"github.com/rm3l/container-scan-to-sarif/containerscan"
 )
-
-// regex to extract file path in case string includes (distro:version)
-var re = regexp.MustCompile(`(?P<path>.+?)(?:\s*\((?:.*?)\).*?)?$`)
 
 type SarifReport struct {
 	Version string           `json:"version"`
@@ -75,8 +71,8 @@ type SarifReportRunResultLocationPhysicalLocationArtifactLocation struct {
 type SarifReportRunResultLocationPhysicalLocationRegion struct {
 	StartLine   *int `json:"startLine,omitempty"`
 	StartColumn *int `json:"startColumn,omitempty"`
-	EndLine   *int `json:"endLine,omitempty"`
-	EndColumn *int `json:"endColumn,omitempty"`
+	EndLine     *int `json:"endLine,omitempty"`
+	EndColumn   *int `json:"endColumn,omitempty"`
 }
 
 func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifReport, error) {
@@ -100,6 +96,7 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 			Name:    "Dockle",
 			Version: "latest",
 		})
+	containerImageNameToPathUri := toPathUri(containerScanReport.ImageName)
 	var rulesMap = map[string]SarifReportRunToolDriverRule{}
 	//Trivy Vulnerabilities
 	for _, vulnerability := range containerScanReport.Vulnerabilities {
@@ -140,7 +137,7 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 			},
 		}
 		//startLine, endLine, startColumn, endColumn
-		physicalLocationRegion := []int { 1, 1, 1, 1}
+		physicalLocationRegion := []int{1, 1, 1, 1}
 		sarifRunResult.Locations = append(sarifRunResult.Locations,
 			SarifReportRunResultLocation{
 				PhysicalLocation: SarifReportRunResultLocationPhysicalLocation{
@@ -148,10 +145,10 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 						Uri: toPathUri(vulnerability.Target),
 					},
 					Region: &SarifReportRunResultLocationPhysicalLocationRegion{
-						StartLine: &physicalLocationRegion[0],
-						EndLine: &physicalLocationRegion[1],
+						StartLine:   &physicalLocationRegion[0],
+						EndLine:     &physicalLocationRegion[1],
 						StartColumn: &physicalLocationRegion[2],
-						EndColumn: &physicalLocationRegion[3],
+						EndColumn:   &physicalLocationRegion[3],
 					},
 				},
 			})
@@ -197,18 +194,18 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 			},
 		}
 		//startLine, endLine, startColumn, endColumn
-		physicalLocationRegion := []int { 1, 1, 1, 1}
+		physicalLocationRegion := []int{1, 1, 1, 1}
 		sarifRunResult.Locations = append(sarifRunResult.Locations,
 			SarifReportRunResultLocation{
 				PhysicalLocation: SarifReportRunResultLocationPhysicalLocation{
 					ArtifactLocation: SarifReportRunResultLocationPhysicalLocationArtifactLocation{
-						Uri: toPathUri("container-image"),
+						Uri: containerImageNameToPathUri,
 					},
 					Region: &SarifReportRunResultLocationPhysicalLocationRegion{
-						StartLine: &physicalLocationRegion[0],
-						EndLine: &physicalLocationRegion[1],
+						StartLine:   &physicalLocationRegion[0],
+						EndLine:     &physicalLocationRegion[1],
 						StartColumn: &physicalLocationRegion[2],
-						EndColumn: &physicalLocationRegion[3],
+						EndColumn:   &physicalLocationRegion[3],
 					},
 				},
 			})
@@ -224,16 +221,8 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 	return sarifReport, nil
 }
 
-//Inspired from https://github.com/aquasecurity/trivy/blob/main/pkg/report/template.go
 func toPathUri(input string) string {
-	var result = input
-	var matches = re.FindStringSubmatch(result)
-	if matches != nil {
-		result = matches[re.SubexpIndex("path")]
-	}
-	result = strings.ReplaceAll(result, "\\", "/")
-	result = strings.ReplaceAll(result, ":", "__")
-	return result
+	return fmt.Sprintf("file://%s", input)
 }
 
 func (report SarifReport) WriteTo(outputPath string) error {
