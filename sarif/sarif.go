@@ -81,9 +81,9 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 		Schema:  "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Documents/CommitteeSpecifications/2.1.0/sarif-schema-2.1.0.json",
 	}
 	sarifReportRunDriver := SarifReportRunToolDriver{
-		Name:           "azure-container-scan",
+		Name:           "container-scan",
 		InformationUri: "https://github.com/Azure/container-scan",
-		FullName:       "Azure Container Scan",
+		FullName:       "Container Scan",
 		Version:        "0.1",
 	}
 	sarifReportRun := SarifReportRun{}
