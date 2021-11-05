@@ -221,8 +221,14 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 	return sarifReport, nil
 }
 
+const pathUriReplacement = "_"
+
 func toPathUri(input string) string {
-	return fmt.Sprintf("file://%s", input)
+	var inputSanitized = strings.ReplaceAll(input, ":", pathUriReplacement)
+	inputSanitized = strings.ReplaceAll(inputSanitized, " ", pathUriReplacement)
+	inputSanitized = strings.ReplaceAll(inputSanitized, "(", pathUriReplacement)
+	inputSanitized = strings.ReplaceAll(inputSanitized, ")", pathUriReplacement)
+	return inputSanitized
 }
 
 func (report SarifReport) WriteTo(outputPath string) error {
