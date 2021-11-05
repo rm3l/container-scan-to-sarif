@@ -52,7 +52,7 @@ You may want to use the following Action in your Workflows: [rm3l/container-scan
     uses: rm3l/container-scan-to-sarif-action@v1
     if: ${{ always() }}
     with:
-      converter-version: 0.3.0
+      converter-version: 0.4.0
       input-file: ${{ steps.scan.outputs.scan-report-path }}
 
   - name: Upload SARIF reports to GitHub Security tab
