@@ -49,10 +49,11 @@ type SarifReportRunToolDriverRuleDescription struct {
 	Text string `json:"text,omitempty"`
 }
 type SarifReportRunResult struct {
-	RuleId    string                         `json:"ruleId"`
-	Level     string                         `json:"level"`
-	Message   SarifReportRunResultMessage    `json:"message"`
-	Locations []SarifReportRunResultLocation `json:"locations,omitempty"`
+	RuleId              string                         `json:"ruleId"`
+	Level               string                         `json:"level"`
+	Message             SarifReportRunResultMessage    `json:"message"`
+	Locations           []SarifReportRunResultLocation `json:"locations,omitempty"`
+	PartialFingerprints map[string]string              `json:"partialFingerprints,omitempty"`
 }
 type SarifReportRunResultMessage struct {
 	Text string `json:"text"`
@@ -98,6 +99,7 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 		})
 	containerImageNameToPathUri := toPathUri(containerScanReport.ImageName)
 	var rulesMap = map[string]SarifReportRunToolDriverRule{}
+	var partialFingerPrintsMap = map[string]string{}
 	//Trivy Vulnerabilities
 	for _, vulnerability := range containerScanReport.Vulnerabilities {
 		var level string
@@ -152,6 +154,11 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 					},
 				},
 			})
+		sarifRunResult.PartialFingerprints = make(map[string]string)
+		if _, exists := partialFingerPrintsMap[vulnerability.VulnerabilityId]; !exists {
+			partialFingerPrintsMap[vulnerability.VulnerabilityId] = vulnerability.VulnerabilityId
+			sarifRunResult.PartialFingerprints[vulnerability.VulnerabilityId] = vulnerability.VulnerabilityId
+		}
 		sarifReportRun.Results = append(sarifReportRun.Results, sarifRunResult)
 	}
 
@@ -209,6 +216,11 @@ func FromContainerScan(containerScanReport containerscan.ContainerScan) (SarifRe
 					},
 				},
 			})
+		sarifRunResult.PartialFingerprints = make(map[string]string)
+		if _, exists := partialFingerPrintsMap[bestPracticeViolation.Code]; !exists {
+			partialFingerPrintsMap[bestPracticeViolation.Code] = bestPracticeViolation.Code
+			sarifRunResult.PartialFingerprints[bestPracticeViolation.Code] = bestPracticeViolation.Code
+		}
 		sarifReportRun.Results = append(sarifReportRun.Results, sarifRunResult)
 	}
 	sarifReportRun.Tool.Driver = sarifReportRunDriver
