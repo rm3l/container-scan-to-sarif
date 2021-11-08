@@ -1,10 +1,10 @@
 # container-scan-to-sarif
 
-[![Build](https://github.com/rm3l/container-scan-to-sarif/actions/workflows/build.yml/badge.svg)](https://github.com/rm3l/container-scan-to-sarif/actions/workflows/build.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/rm3l/container-scan-to-sarif)](https://goreportcard.com/report/github.com/rm3l/container-scan-to-sarif)
+[![Build](https://github.com/rm3l/container-scan-to-sarif/actions/workflows/build.yml/badge.svg)](https://github.com/rm3l/container-scan-to-sarif/actions/workflows/build.yml)
 [![Release](https://github.com/rm3l/container-scan-to-sarif/actions/workflows/release.yml/badge.svg)](https://github.com/rm3l/container-scan-to-sarif/actions/workflows/release.yml)
 
-`container-scan-to-sarif` converts [Azure Container Scan Action](https://github.com/Azure/container-scan#action-output) output to [Static Analysis Results Interchange Format (SARIF)](https://sarifweb.azurewebsites.net/), for an easier integration with [GitHub Code Scanning](https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/about-code-scanning).
+`container-scan-to-sarif` converts [Azure Container Scan Action](https://github.com/Azure/container-scan#action-output) output to [Static Analysis Results Interchange Format (SARIF)](https://sarifweb.azurewebsites.net/), for an easier integration with tools like [GitHub Code Scanning](https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/about-code-scanning).
 
 ## Rationale
 The [Azure Container Scan Action](https://github.com/Azure/container-scan) combines both [Trivy](https://github.com/aquasecurity/trivy) 
@@ -19,9 +19,9 @@ On the other hand, [GitHub Code Scanning](https://docs.github.com/en/code-securi
 [Static Analysis Results Interchange Format (SARIF)](https://sarifweb.azurewebsites.net/) reports, so users can navigate their reports in the nice 
 "Code Scanning Alerts" interface.
 
-This is where `container-scan-to-sarif` comes into play, by bridging the gap between Container Scan and GitHub Code Scanning.
+This is where `container-scan-to-sarif` comes into play, by bridging the gap between Container Scan and other tools like GitHub Code Scanning.
 
-It also started as a learning exercise for myself to use [Golang](https://golang.org/) in practice.
+It also started as a learning exercise for myself to use [Go](https://golang.org/) in practice.
 
 ## Installation
 
