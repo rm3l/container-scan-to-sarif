@@ -30,7 +30,7 @@ You can download the [latest release](https://github.com/rm3l/container-scan-to-
 Or, from the sources:
 
 ```shell
-go install github.com/rm3l/container-scan-to-sarif@latest
+go install github.com/rm3l/container-scan-to-sarif/cmd/container-scan-to-sarif@latest
 ```
 
 ## Usage
@@ -90,11 +90,13 @@ docker container run --rm \
 ```shell
 container-scan-to-sarif --help
 
-Usage of container-scan-to-sarif:
+Usage of ./container-scan-to-sarif:
   -input string
-        Path to the Container Scan JSON Report (default "./scanreport.json")
+        path to the Container Scan JSON Report (default "./scanreport.json")
   -output string
-        Path to the SARIF output file. If not specified, the resulting SARIF report will be pretty-printed to the standard output.
+        path to the SARIF output file. If not specified, the resulting SARIF report will be pretty-printed to the standard output.
+  -verbose
+        verbose output
 ```
 
 ## Building from source
@@ -103,7 +105,7 @@ Once you have cloned this repo, you can build `container-scan-to-sarif` with the
 
 ```shell
 # Build
-go build
+go build -o ./container-scan-to-sarif cmd/container-scan-to-sarif/main.go
 
 # The executable can the be found here: ./container-scan-to-sarif
 ./container-scan-to-sarif --help
