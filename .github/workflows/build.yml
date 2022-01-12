@@ -49,7 +49,7 @@ jobs:
     - name: Convert Scan Report to SARIF
       if: ${{ always() }}
       run: |
-        go run main.go \
+        go run cmd/container-scan-to-sarif/main.go \
           -input "${{ steps.scan.outputs.scan-report-path }}" \
           -output scan.sarif
     - name: Upload SARIF report to GitHub Security tab

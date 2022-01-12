@@ -138,3 +138,5 @@ modules.xml
 # End of https://www.toptal.com/developers/gitignore/api/go,intellij+all
 
 container-scan-to-sarif
+
+!cmd/container-scan-to-sarif
