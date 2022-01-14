@@ -30,15 +30,16 @@ type BestPracticeViolation struct {
 
 func ParseReport(scanReportPath string) (Report, error) {
 	var report Report
-	input, err := os.ReadFile(scanReportPath)
+	input, err := os.Open(scanReportPath)
 	if err != nil {
-		log.Println("error when reading file", err)
 		return report, err
 	}
-
-	err = json.Unmarshal(input, &report)
-	if err != nil {
-		log.Println("error unmarshalling JSON", err)
-	}
+	defer func(input *os.File) {
+		err := input.Close()
+		if err != nil {
+			log.Println("error while trying to close input file", err)
+		}
+	}(input)
+	err = json.NewDecoder(input).Decode(&report)
 	return report, err
 }
