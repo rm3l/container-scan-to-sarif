@@ -1,9 +1,8 @@
 package sarif
 
 import (
+	"bytes"
 	"encoding/json"
-	"io/ioutil"
-	"log"
 )
 
 type Report struct {
@@ -73,16 +72,10 @@ type RunResultLocationPhysicalLocationRegion struct {
 	EndColumn   *uint `json:"endColumn,omitempty"`
 }
 
-func (report Report) WriteTo(outputPath string, verbose bool) error {
-	jsonData, err := json.MarshalIndent(report, "", "  ")
-	if err != nil {
-		return err
-	}
-	if len(outputPath) > 0 {
-		return ioutil.WriteFile(outputPath, jsonData, 0o644)
-	}
-	if verbose {
-		log.Println(string(jsonData))
-	}
-	return nil
+func (r Report) ToJsonString() (string, error) {
+	buffer := new(bytes.Buffer)
+	encoder := json.NewEncoder(buffer)
+	encoder.SetIndent("", "  ")
+	err := encoder.Encode(r)
+	return buffer.String(), err
 }

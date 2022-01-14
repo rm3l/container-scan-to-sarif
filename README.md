@@ -93,10 +93,6 @@ container-scan-to-sarif --help
 Usage of ./container-scan-to-sarif:
   -input string
         path to the Container Scan JSON Report (default "./scanreport.json")
-  -output string
-        path to the SARIF output file. If not specified, the resulting SARIF report will be pretty-printed to the standard output.
-  -verbose
-        verbose output
 ```
 
 ## Building from source
@@ -131,7 +127,7 @@ However, please make sure your description is clear enough and has sufficient in
 
     The MIT License (MIT)
 
-    Copyright (c) 2021 Armel Soro
+    Copyright (c) 2021-2022 Armel Soro
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
