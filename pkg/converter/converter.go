@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/rm3l/container-scan-to-sarif/pkg/containerscan"
 	"github.com/rm3l/container-scan-to-sarif/pkg/sarif"
+	"sort"
 	"strings"
 )
 
@@ -30,6 +31,10 @@ func NewSarifReportFromContainerScanReport(containerScanReport containerscan.Rep
 			Name:    "Dockle",
 			Version: "latest",
 		})
+	sort.SliceStable(sarifReportRun.Tool.Extensions, func(i, j int) bool {
+		return sarifReportRun.Tool.Extensions[i].Name < sarifReportRun.Tool.Extensions[j].Name
+	})
+
 	containerImageNameToPathUri := toPathUri(containerScanReport.ImageName)
 	var rulesMap = map[string]sarif.RunToolDriverRule{}
 	var partialFingerPrintsMap = map[string]string{}
@@ -162,7 +167,18 @@ func NewSarifReportFromContainerScanReport(containerScanReport containerscan.Rep
 		rules = append(rules, rule)
 	}
 	sarifReportRun.Tool.Driver.Rules = rules
+	sort.SliceStable(sarifReportRun.Tool.Driver.Rules, func(i, j int) bool {
+		return sarifReportRun.Tool.Driver.Rules[i].Id < sarifReportRun.Tool.Driver.Rules[j].Id
+	})
+
 	sarifReport.Runs = append(sarifReport.Runs, sarifReportRun)
+
+	sort.SliceStable(sarifReport.Runs, func(i, j int) bool {
+		return sarifReport.Runs[i].Tool.Driver.Name < sarifReport.Runs[j].Tool.Driver.Name
+	})
+	sort.SliceStable(sarifReportRun.Results, func(i, j int) bool {
+		return sarifReportRun.Results[i].RuleId < sarifReportRun.Results[j].RuleId
+	})
 	return sarifReport, nil
 }
 
