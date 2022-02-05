@@ -97,7 +97,7 @@ Usage of ./container-scan-to-sarif:
 
 ## Building from source
 
-Once you have cloned this repo, you can build `container-scan-to-sarif` with the command below:
+Once you have cloned this repo and [installed Go](https://go.dev/doc/install), you can build `container-scan-to-sarif` with the command below:
 
 ```shell
 # Build
