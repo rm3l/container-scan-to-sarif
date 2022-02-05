@@ -1,7 +1,8 @@
 # container-scan-to-sarif
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/rm3l/container-scan-to-sarif)](https://goreportcard.com/report/github.com/rm3l/container-scan-to-sarif)
 [![Build](https://github.com/rm3l/container-scan-to-sarif/actions/workflows/build.yml/badge.svg)](https://github.com/rm3l/container-scan-to-sarif/actions/workflows/build.yml)
+[![Lint](https://github.com/rm3l/container-scan-to-sarif/actions/workflows/lint.yml/badge.svg)](https://github.com/rm3l/container-scan-to-sarif/actions/workflows/lint.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/rm3l/container-scan-to-sarif)](https://goreportcard.com/report/github.com/rm3l/container-scan-to-sarif)
 [![Release](https://github.com/rm3l/container-scan-to-sarif/actions/workflows/release.yml/badge.svg)](https://github.com/rm3l/container-scan-to-sarif/actions/workflows/release.yml)
 
 `container-scan-to-sarif` converts [Azure Container Scan Action](https://github.com/Azure/container-scan#action-output) output to [Static Analysis Results Interchange Format (SARIF)](https://sarifweb.azurewebsites.net/), for an easier integration with tools like [GitHub Code Scanning](https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/about-code-scanning).
