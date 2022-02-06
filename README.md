@@ -13,14 +13,13 @@ and [Dockle](https://github.com/goodwithtech/dockle) tools to scan container ima
 for common vulnerabilities (CVEs) and best practices violations. It also provides with the ability to ignore some checks 
 if needed, via an [`allowedlist.yaml` file](https://github.com/Azure/container-scan#ignoring-vulnerabilities).
 
-This is all great, but the resulting output is a non-standard JSON file, which, at this time,
-can only be uploaded as a build artifact, making it hard to read across different CI runs or integrate with other tools.
+This is all great, but the resulting output is a non-standard JSON file, which, at this time, makes it hard to read across different CI runs or integrate with other tools.
 
 On the other hand, [GitHub Code Scanning](https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/about-code-scanning) integrates very well with external tools that are able to produce
 [Static Analysis Results Interchange Format (SARIF)](https://sarifweb.azurewebsites.net/) reports, so users can navigate their reports in the nice 
 "Code Scanning Alerts" interface.
 
-This is where `container-scan-to-sarif` comes into play, by bridging the gap between Container Scan and other tools like GitHub Code Scanning.
+This is where `container-scan-to-sarif` comes into play, by bridging the gap between Container Scan and other tools that support SARIF standard reports, like GitHub Code Scanning.
 
 It also started as a learning exercise for myself to use [Go](https://golang.org/) in practice.
 
