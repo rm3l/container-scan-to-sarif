@@ -38,6 +38,10 @@ func NewSarifReportFromContainerScanReport(containerScanReport containerscan.Rep
 	containerImageNameToPathUri := toPathUri(containerScanReport.ImageName)
 	var rulesMap = map[string]sarif.RunToolDriverRule{}
 	var partialFingerPrintsMap = map[string]string{}
+
+	nbVulns := len(containerScanReport.Vulnerabilities)
+	nbPracticesViolations := len(containerScanReport.BestPracticeViolations)
+	sarifReportRun.Results = make([]sarif.RunResult, 0, nbVulns+nbPracticesViolations)
 	//Trivy Vulnerabilities
 	for _, vulnerability := range containerScanReport.Vulnerabilities {
 		var level string
@@ -161,6 +165,7 @@ func NewSarifReportFromContainerScanReport(containerScanReport containerscan.Rep
 		}
 		sarifReportRun.Results = append(sarifReportRun.Results, sarifRunResult)
 	}
+
 	sarifReportRun.Tool.Driver = sarifReportRunDriver
 	rules := make([]sarif.RunToolDriverRule, 0, len(rulesMap))
 	for _, rule := range rulesMap {
