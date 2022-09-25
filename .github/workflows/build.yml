@@ -39,7 +39,7 @@ jobs:
       continue-on-error: true
       uses: Azure/container-scan@v0.1
       with:
-        image-name: "busybox:1.35.0"
+        image-name: "busybox:latest"
     - name: Convert Scan Report to SARIF
       if: ${{ always() }}
       run: |
