@@ -62,10 +62,10 @@ jobs:
       - name: Install asdf dependencies
         uses: asdf-vm/actions/install@v2
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v4
+        uses: goreleaser/goreleaser-action@v6
         with:
           distribution: goreleaser
           version: latest
-          args: release --rm-dist --snapshot --skip-sign
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
