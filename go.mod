@@ -1,5 +1,5 @@
 module github.com/rm3l/container-scan-to-sarif
 
-go 1.19
+go 1.24
 
 require github.com/google/go-cmp v0.5.9
